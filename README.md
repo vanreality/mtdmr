@@ -49,7 +49,7 @@ Now, you can run the pipeline using:
 
 ```bash
 nextflow run nf-core/mtdmr \
-   -profile <docker/singularity/.../institute> \
+   -profile singularity \
    --input samplesheet.csv \
    --outdir <OUTDIR>
 ```
