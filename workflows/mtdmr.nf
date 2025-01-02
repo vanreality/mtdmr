@@ -7,6 +7,8 @@ include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_mtdmr_pipeline'
 
+include { EXTRACT_METHYLATION_RATE } from '../subworkflows/local/methyldackel_extract/main.nf'
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -20,6 +22,10 @@ workflow MTDMR {
     main:
 
     ch_versions = Channel.empty()
+
+    // TODO: methyldackel
+    EXTRACT_METHYLATION_RATE(ch_samplesheet.bam, params.reference)
+    // TODO: metilene
 
     //
     // Collate and save software versions
