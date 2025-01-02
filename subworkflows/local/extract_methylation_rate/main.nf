@@ -11,7 +11,6 @@ include { METHYLDACKEL_EXTRACT } from '../../modules/nf-core/methyldackel/extrac
 
 workflow EXTRACT_METHYLATION_RATE {
     take:
-    sample_name
     bam
     fasta
 
@@ -36,7 +35,7 @@ workflow EXTRACT_METHYLATION_RATE {
     ch_fasta_index = SAMTOOLS_FAIDX.out.fai
     ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
-    ch_bam = Channel.value([sample_name, file(bam, checkIfExists: true)])
+    ch_bam = Channel.value([[:], file(bam, checkIfExists: true)])
     SAMTOOLS_INDEX(ch_bam)
     ch_bam_index = SAMTOOLS_INDEX.out.bai
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
@@ -51,6 +50,6 @@ workflow EXTRACT_METHYLATION_RATE {
     ch_versions = ch_versions.mix(METHYLDACKEL_EXTRACT.out.versions)
 
     emit:
-    bedgraph                   // [ ${sample_name}_CpG.bedGraph ]
+    bedgraph                   // [ ${bam.baseName}_CpG.bedGraph ]
     ch_versions                // [ versions.yml ]
 }
