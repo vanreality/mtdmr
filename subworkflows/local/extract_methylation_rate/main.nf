@@ -4,10 +4,10 @@
 
 // Extract methylation information from BAM files using Methyldackel.
 
-include { GUNZIP } from '../../modules/nf-core/gunzip/main.nf'
-include { SAMTOOLS_FAIDX } from '../../modules/nf-core/samtools/faidx/main.nf'
-include { SAMTOOLS_INDEX } from '../../modules/nf-core/samtools/index/main.nf'
-include { METHYLDACKEL_EXTRACT } from '../../modules/nf-core/methyldackel/extract/main.nf'
+include { GUNZIP } from '../../../modules/nf-core/gunzip/main.nf'
+include { SAMTOOLS_FAIDX } from '../../../modules/nf-core/samtools/faidx/main.nf'
+include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index/main.nf'
+include { METHYLDACKEL_EXTRACT } from '../../../modules/nf-core/methyldackel/extract/main.nf'
 
 workflow EXTRACT_METHYLATION_RATE {
     take:

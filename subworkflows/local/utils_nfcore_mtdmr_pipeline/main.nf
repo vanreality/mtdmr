@@ -69,7 +69,7 @@ workflow PIPELINE_INITIALISATION {
 
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .groupTuple()
+        .map { item -> [ sample: item[0]['id'], tissue: item[1], bam: item[2] ] }
         .set { ch_samplesheet }
 
     emit:

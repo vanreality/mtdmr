@@ -7,7 +7,7 @@ include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_mtdmr_pipeline'
 
-include { EXTRACT_METHYLATION_RATE } from '../subworkflows/local/methyldackel_extract/main.nf'
+include { EXTRACT_METHYLATION_RATE } from '../subworkflows/local/extract_methylation_rate/main.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -23,8 +23,11 @@ workflow MTDMR {
 
     ch_versions = Channel.empty()
 
+    ch_reference = Channel.fromPath(params.reference)
+
     // TODO: methyldackel
-    EXTRACT_METHYLATION_RATE(ch_samplesheet.bam, params.reference)
+    ch_bam = ch_samplesheet.map { it.bam }
+    EXTRACT_METHYLATION_RATE(ch_bam, ch_reference)
     // TODO: metilene
 
     //
