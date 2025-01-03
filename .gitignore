@@ -7,3 +7,5 @@ testing/
 testing*
 *.pyc
 null/
+**.ipynb_checkpoints/
+test_data/
