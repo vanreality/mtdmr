@@ -8,6 +8,7 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_mtdmr_pipeline'
 
 include { EXTRACT_METHYLATION_RATE } from '../subworkflows/local/extract_methylation_rate/main.nf'
+include { GENERATE_METILENE_INPUT } from '../subworkflows/local/generate_metilene_input/main.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,17 +19,24 @@ include { EXTRACT_METHYLATION_RATE } from '../subworkflows/local/extract_methyla
 workflow MTDMR {
 
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
+    ch_samplesheet // channel: samplesheet read in from --input, with columns ['sample', 'tissue', 'bam']
     main:
 
     ch_versions = Channel.empty()
 
-    // TODO: methyldackel
+    // Extract methylation rate from bam files
     EXTRACT_METHYLATION_RATE(ch_samplesheet)
 
-    // TODO: metilene
+    // TODO: Merge methylation rate of samples to metilene input format matrix
+    GENERATE_METILENE_INPUT(
+        EXTRACT_METHYLATION_RATE.out.bedgraph
+    )
 
-    //
+    // TODO: Run metilene to call DMRs
+
+
+    // TODO: Annotate DMRs
+
 
     // Collate and save software versions
     //
