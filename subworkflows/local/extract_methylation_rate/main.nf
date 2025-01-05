@@ -11,8 +11,7 @@ include { METHYLDACKEL_EXTRACT } from '../../../modules/nf-core/methyldackel/ext
 
 workflow EXTRACT_METHYLATION_RATE {
     take:
-    bam
-    fasta
+    ch_samplesheet
 
     main:
     ch_fasta        = Channel.empty()
@@ -21,27 +20,43 @@ workflow EXTRACT_METHYLATION_RATE {
     ch_bam_index    = Channel.empty()
     ch_versions     = Channel.empty()
 
+    // ch_samplesheet.view { it -> "Current samples: ${it}" }
+
+    fasta = file(params.reference)
+
     if (fasta.toString().endsWith('.gz')) {
         GUNZIP (
-            [ [:], file(fasta, checkIfExists: true) ]
+            [ [:], fasta ]
         )
         ch_fasta    = GUNZIP.out.gunzip
         ch_versions = ch_versions.mix(GUNZIP.out.versions)
     } else {
-        ch_fasta    = Channel.value([[:], file(fasta, checkIfExists: true)])
+        ch_fasta    = Channel.value([[:], fasta])
     }
 
     SAMTOOLS_FAIDX(ch_fasta, [[:], []])
     ch_fasta_index = SAMTOOLS_FAIDX.out.fai
     ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
-    ch_bam = Channel.value([[:], file(bam, checkIfExists: true)])
+    ch_samplesheet
+        .map { [[id: it.sample], it.bam] }
+        .set { ch_bam }
     SAMTOOLS_INDEX(ch_bam)
     ch_bam_index = SAMTOOLS_INDEX.out.bai
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
+    ch_combined = ch_bam
+        .join(ch_bam_index)
+        .map { meta, bam, bai ->
+            tuple(meta, bam, bai)
+        }
+    ch_fasta = ch_fasta
+        .map {meta, fasta -> fasta}
+    ch_fasta_index = ch_fasta_index
+        .map {meta, fasta_index -> fasta_index}
+
     METHYLDACKEL_EXTRACT(
-        ch_bam.join(ch_bam_index),
+        ch_combined,
         ch_fasta,
         ch_fasta_index
     )

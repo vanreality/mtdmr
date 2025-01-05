@@ -23,14 +23,13 @@ workflow MTDMR {
 
     ch_versions = Channel.empty()
 
-    ch_reference = Channel.fromPath(params.reference)
-
     // TODO: methyldackel
-    ch_bam = ch_samplesheet.map { it.bam }
-    EXTRACT_METHYLATION_RATE(ch_bam, ch_reference)
+    EXTRACT_METHYLATION_RATE(ch_samplesheet)
+
     // TODO: metilene
 
     //
+
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
