@@ -25,9 +25,7 @@ workflow EXTRACT_METHYLATION_RATE {
     fasta = file(params.reference)
 
     if (fasta.toString().endsWith('.gz')) {
-        GUNZIP (
-            [ [:], fasta ]
-        )
+        GUNZIP ([[:], fasta])
         ch_fasta    = GUNZIP.out.gunzip
         ch_versions = ch_versions.mix(GUNZIP.out.versions)
     } else {
@@ -38,14 +36,11 @@ workflow EXTRACT_METHYLATION_RATE {
     ch_fasta_index = SAMTOOLS_FAIDX.out.fai
     ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
-    ch_samplesheet
-        .map { [[id: it.sample], it.bam] }
-        .set { ch_bam }
-    SAMTOOLS_INDEX(ch_bam)
+    SAMTOOLS_INDEX(ch_samplesheet)
     ch_bam_index = SAMTOOLS_INDEX.out.bai
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
-    ch_combined = ch_bam
+    ch_combined = ch_samplesheet
         .join(ch_bam_index)
         .map { meta, bam, bai ->
             tuple(meta, bam, bai)
