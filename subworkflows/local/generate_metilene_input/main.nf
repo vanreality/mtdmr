@@ -4,7 +4,7 @@
 
 // Merge methylation rate of samples to metilene input format matrix
 
-include { MERGE_BEDGRAPHS } from '../../modules/local/merge_bedgraphs/main.nf'
+include { MERGE_BEDGRAPHS } from '../../../modules/local/merge_bedgraphs/main.nf'
 
 workflow GENERATE_METILENE_INPUT {
     take:
