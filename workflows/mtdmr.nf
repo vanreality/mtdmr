@@ -8,7 +8,8 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_mtdmr_pipeline'
 
 include { EXTRACT_METHYLATION_RATE } from '../subworkflows/local/extract_methylation_rate/main.nf'
-include { GENERATE_METILENE_INPUT } from '../subworkflows/local/generate_metilene_input/main.nf'
+include { GENERATE_METILENE_INPUT }  from '../subworkflows/local/generate_metilene_input/main.nf'
+include { METILENE_CALL_DMR }        from '../subworkflows/local/metilene_call_dmr/main.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

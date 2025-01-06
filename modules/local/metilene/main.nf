@@ -13,7 +13,6 @@ process METILENE {
     def prefix = task.ext.prefix ?: "${meta.id}"
     
     """
-    mkdir -p ${group_dir}
     metilene -a target -b background -t ${task.cpus} -m 3 ${input_matrix} | \\
     sort -V -k1,1 -k2,2n > ${prefix}_DMRs.tsv
 
