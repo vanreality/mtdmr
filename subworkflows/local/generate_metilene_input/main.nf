@@ -22,18 +22,20 @@ workflow GENERATE_METILENE_INPUT {
 
     // Generate channel where each tissue is compared to all others combined
     ch_target_vs_background = ch_grouped
-        .map { target -> 
-            def (target_tissue, target_bedgraphs) = target
-            def background_bedgraphs = ch_grouped
-                .filter { it[0] != target_tissue }
-                .collect { it[1] }
-                .flatten()
-            def meta = [id: target_tissue]
-            
-            return [meta, target_bedgraphs, background_bedgraphs]
+        .combine(ch_grouped)
+        .filter { target, target_files, background, background_files -> 
+            target != background 
+        }
+        .map { target, target_files, background, background_files ->
+            def meta = [id: target]
+            [meta, target_files, background_files]
+        }
+        .groupTuple(by: 0)
+        .map { meta, target_files, background_files ->
+            [meta, target_files[0], background_files.flatten()]
         }
 
-    ch_target_vs_background.view { "ch_target_vs_background: $it" }
+    // ch_target_vs_background.view { "ch_target_vs_background: $it" }
     
     // Process each tissue to create metilene input matrix
     MERGE_BEDGRAPHS(ch_target_vs_background)

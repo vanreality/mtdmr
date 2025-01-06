@@ -4,7 +4,7 @@ import argparse
 def process_bedgraph(file, prefix):
     df = pd.read_csv(file, sep='\t', skiprows=1, header=None,
                      names=['chr', 'start', 'end', 'methylation_rate', 'meth_count', 'unmeth_count'])
-    df = df[['chr', 'start', 'meth_count']]
+    df = df[['chr', 'start', 'methylation_rate']]
     df.rename(columns={'meth_count': f'{prefix}_{file.split("/")[-1].split(".")[0]}'}, inplace=True)
     return df
 
