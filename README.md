@@ -10,7 +10,13 @@
 
 ## Introduction
 
-**nf-core/mtdmr** is a bioinformatics pipeline that ...
+**nf-core/mtdmr** is a bioinformatics pipeline designed to identify Differentially Methylated Regions (DMRs) across multiple tissues. This end-to-end pipeline processes BAM files to generate comprehensive DMR tables. The pipeline includes several key steps:
+
+- **Methylation Calling**: Identification of methylation sites and levels.
+- **DMR Detection**: Run metilene to detect regions with significant methylation differences.
+- **Output Generation**: Creation of detailed reports and tables summarizing the DMRs.
+
+The pipeline is highly configurable and can be adapted to various experimental designs and datasets. It leverages the power of Nextflow and Singularity to ensure reproducibility and scalability across different computing environments.
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
