@@ -3,9 +3,9 @@ import argparse
 
 def process_bedgraph(file, prefix):
     df = pd.read_csv(file, sep='\t', skiprows=1, header=None,
-                     names=['chr', 'start', 'end', 'methylation_rate', 'meth_count', 'unmeth_count'])
-    df = df[['chr', 'start', 'methylation_rate']]
-    df.rename(columns={'meth_count': f'{prefix}_{file.split("/")[-1].split(".")[0]}'}, inplace=True)
+                     names=['chr', 'pos', 'end', 'methylation_rate', 'meth_count', 'unmeth_count'])
+    df = df[['chr', 'pos', 'methylation_rate']]
+    df.rename(columns={'methylation_rate': f'{prefix}_{file.split("/")[-1].split(".")[0]}'}, inplace=True)
     return df
 
 def main(target_files, background_files, output):
@@ -15,7 +15,7 @@ def main(target_files, background_files, output):
     # Merge all files
     merged_df = target_dfs[0]
     for df in target_dfs[1:] + background_dfs:
-        merged_df = pd.merge(merged_df, df, on=['chr', 'start'], how='outer')
+        merged_df = pd.merge(merged_df, df, on=['chr', 'pos'], how='outer')
 
     merged_df.fillna('NA', inplace=True)
     merged_df.to_csv(output, sep='\t', index=False)

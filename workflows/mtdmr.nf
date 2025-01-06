@@ -33,7 +33,9 @@ workflow MTDMR {
     )
 
     // TODO: Run metilene to call DMRs
-
+    METILENE_CALL_DMR(
+        GENERATE_METILENE_INPUT.out.metilene_input_matrix
+    )
 
     // TODO: Annotate DMRs
 
