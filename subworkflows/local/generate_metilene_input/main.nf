@@ -42,4 +42,5 @@ workflow GENERATE_METILENE_INPUT {
     
     emit:
     metilene_input_matrix = MERGE_BEDGRAPHS.out.matrix // channel: [ val(meta), path(matrix) ]
+    versions              = MERGE_BEDGRAPHS.out.versions
 }

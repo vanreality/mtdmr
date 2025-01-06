@@ -18,4 +18,5 @@ workflow METILENE_CALL_DMR {
 
     emit:
     dmr      = METILENE.out.dmr
+    versions = METILENE.out.versions
 }

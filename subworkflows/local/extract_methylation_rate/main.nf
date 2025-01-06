@@ -60,6 +60,6 @@ workflow EXTRACT_METHYLATION_RATE {
     ch_versions = ch_versions.mix(METHYLDACKEL_EXTRACT.out.versions)
 
     emit:
-    bedgraph                   // [ val(meta), path(${bam.baseName}_CpG.bedGraph) ]
-    ch_versions                // [ versions.yml ]
+    bedgraph                              // [ val(meta), path(${bam.baseName}_CpG.bedGraph) ]
+    versions = ch_versions                // [ versions.yml ]
 }

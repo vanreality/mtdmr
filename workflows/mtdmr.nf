@@ -27,26 +27,24 @@ workflow MTDMR {
 
     // Extract methylation rate from bam files
     EXTRACT_METHYLATION_RATE(ch_samplesheet)
+    ch_versions = ch_versions.mix(EXTRACT_METHYLATION_RATE.out.versions)
 
     // Merge methylation rate of samples to metilene input format matrix
     GENERATE_METILENE_INPUT(
         EXTRACT_METHYLATION_RATE.out.bedgraph
     )
+    ch_versions = ch_versions.mix(GENERATE_METILENE_INPUT.out.versions)
 
     // Run metilene to call DMRs
     METILENE_CALL_DMR(
         GENERATE_METILENE_INPUT.out.metilene_input_matrix
     )
+    ch_versions = ch_versions.mix(METILENE_CALL_DMR.out.versions)
 
     // TODO: Annotate DMRs
 
 
     // Collate and save software versions
-    ch_versions = ch_versions.mix(
-        EXTRACT_METHYLATION_RATE.out.versions,
-        GENERATE_METILENE_INPUT.out.versions,
-        METILENE_CALL_DMR.out.versions
-    )
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
