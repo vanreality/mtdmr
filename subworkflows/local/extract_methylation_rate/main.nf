@@ -43,7 +43,7 @@ workflow EXTRACT_METHYLATION_RATE {
     ch_bam_index = SAMTOOLS_INDEX.out.bai
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
-    ch_combined = ch_samplesheet
+    ch_combined = ch_bam
         .join(ch_bam_index)
         .map { meta, bam, bai ->
             tuple(meta, bam, bai)
