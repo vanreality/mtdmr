@@ -9,11 +9,14 @@ process METILENE {
     tuple val(meta), path("*.tsv") , emit: dmr
     path  "versions.yml"           , emit: versions
 
+    when:
+    task.ext.when == null || task.ext.when
+    
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
+    def args = task.ext.args ?: ''
     """
-    metilene -a target -b background -t ${task.cpus} -m 3 ${input_matrix} | \\
+    metilene ${args} -t ${task.cpus} ${input_matrix} | \\
     sort -V -k1,1 -k2,2n > ${prefix}_DMRs.tsv
 
     cat <<-END_VERSIONS > versions.yml
