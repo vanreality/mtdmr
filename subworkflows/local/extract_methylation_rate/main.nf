@@ -5,6 +5,7 @@
 // Extract methylation information from BAM files using Methyldackel.
 
 include { GUNZIP } from '../../../modules/nf-core/gunzip/main.nf'
+include { SAMTOOLS_SORT } from '../../../modules/nf-core/samtools/sort/main.nf'
 include { SAMTOOLS_FAIDX } from '../../../modules/nf-core/samtools/faidx/main.nf'
 include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index/main.nf'
 include { METHYLDACKEL_EXTRACT } from '../../../modules/nf-core/methyldackel/extract/main.nf'
@@ -20,8 +21,6 @@ workflow EXTRACT_METHYLATION_RATE {
     ch_bam_index    = Channel.empty()
     ch_versions     = Channel.empty()
 
-    // ch_samplesheet.view { it -> "Current samples: ${it}" }
-
     fasta = file(params.reference)
 
     if (fasta.toString().endsWith('.gz')) {
@@ -36,7 +35,11 @@ workflow EXTRACT_METHYLATION_RATE {
     ch_fasta_index = SAMTOOLS_FAIDX.out.fai
     ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
-    SAMTOOLS_INDEX(ch_samplesheet)
+    SAMTOOLS_SORT(ch_samplesheet, ch_fasta)
+    ch_bam = SAMTOOLS_SORT.out.bam
+    ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions)
+
+    SAMTOOLS_INDEX(ch_bam)
     ch_bam_index = SAMTOOLS_INDEX.out.bai
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
