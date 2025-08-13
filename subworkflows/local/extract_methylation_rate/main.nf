@@ -49,7 +49,7 @@ workflow EXTRACT_METHYLATION_RATE {
             tuple(meta, bam, bai)
         }
     ch_fasta = ch_fasta
-        .map {meta, fasta -> fasta}
+        .map {meta, fa -> fa}
     ch_fasta_index = ch_fasta_index
         .map {meta, fasta_index -> fasta_index}
 

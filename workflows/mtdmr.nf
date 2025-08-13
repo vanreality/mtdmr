@@ -42,7 +42,7 @@ workflow MTDMR {
     ch_versions = ch_versions.mix(METILENE_CALL_DMR.out.versions)
 
     // TODO: Annotate DMRs
-    
+
 
     // Collate and save software versions
     softwareVersionsToYAML(ch_versions)

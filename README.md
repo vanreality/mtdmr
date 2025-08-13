@@ -49,15 +49,17 @@ Each row represents a fastq file (single-end) or a pair of fastq files (paired e
 
 -->
 
-Now, you can run the pipeline using:
+Now, you can run the pipeline on Alioth using:
 
 <!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 ```bash
-nextflow run nf-core/mtdmr \
+nextflow run main.nf \
    -profile singularity \
    --input samplesheet.csv \
-   --outdir <OUTDIR>
+   --reference hg38.fasta \
+   --outdir <OUTDIR> \
+   -c conf/run_on_alioth.config
 ```
 
 > [!WARNING]
@@ -82,8 +84,6 @@ We thank the following people for their extensive assistance in the development 
 ## Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
-
-For further information or help, don't hesitate to get in touch on the [Slack `#mtdmr` channel](https://nfcore.slack.com/channels/mtdmr) (you can join with [this invite](https://nf-co.re/join/slack)).
 
 ## Citations
 
